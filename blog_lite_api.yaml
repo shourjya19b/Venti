@@ -1,0 +1,472 @@
+openapi: 3.0.0
+info:
+  title: Blog Lite API Documentation
+  description: 
+    <div><h2>This is the API documentation for the Blog Lite App
+    </h2></div>
+    <br>
+    <h3> User Table Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>user_id</td>
+        <td>Integer</td>
+        <td>Primary Key</td>
+      </tr>
+      <tr>
+        <td>username</td>
+        <td>String</td>
+        <td>Unique,Not Null</td>
+      </tr>
+      <tr>
+        <td>password</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>      
+      <tr>
+        <td>profile_image</td>
+        <td>String</td>
+        <td></td>
+      </tr>         
+    </tbody>
+    </table>
+    <br>
+    <h3> Post Table Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>post_id</td>
+        <td>Integer</td>
+        <td>Primary Key</td>
+      </tr>
+      <tr>
+        <td>title</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>content</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>      
+      <tr>
+        <td>image</td>
+        <td>String</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>user_id</td>
+        <td>Integer</td>
+        <td>Foreign Key (user.user_id), On Delete Cascade</td>
+      </tr>
+      <tr>
+        <td>timestamp</td>
+        <td>DateTime</td>
+        <td></td>
+      </tr>
+    </tbody>
+    </table>
+
+    <h3> Error Codes </h3> 
+    <table>
+      <thead>
+        <th>Resource</th>
+        <th>Error Code</th>
+        <th>Message</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>User</td>
+        <td>U101</td>
+        <td>username is required</td>
+      </tr>
+      <tr>
+        <td>User</td>
+        <td>U102</td>
+        <td>password is required</td>
+      </tr>
+      
+      <tr>
+        <td>User</td>
+        <td>U103</td>
+        <td>Duplicate user</td>
+      </tr>
+      <tr>
+        <td>User</td>
+        <td>U104</td>
+        <td>Cant delete user as user has posted blog(s)</td>
+      </tr>
+      
+      <tr>
+        <td>Post</td>
+        <td>P101</td>
+        <td>title is required</td>
+      </tr>
+      <tr>
+        <td>Post</td>
+        <td>P102</td>
+        <td>content is required</td>
+      </tr>
+      <tr>
+        <td>Post</td>
+        <td>P103</td>
+        <td>user_id is required</td>
+      </tr>
+    </tbody>
+    </table>
+    <br>
+  
+  contact:
+    email: 21f1000757@student.onlinedegree.iitm.ac.in
+  version: 1.0.0
+servers:
+  - url: http://127.0.0.1:5000
+tags:
+  - name: User
+    description: CRUD for User model
+  - name: Post
+    description: CRUD for Post model
+
+paths:
+  /api/user/{username}:
+    description: End point to read, update and delete a user resource.
+    get:
+      tags:
+        - User
+      description: Operation to Read user resource.
+      operationId: getUser
+      parameters:
+        - in: path
+          name: username
+          required: true
+          schema:
+            type: string
+            example: Virat
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                title: user object
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                    example: 1
+                  username:
+                    type: string
+                    example: Virat
+                          
+        '500':
+          description: Internal Server Error
+        '404':
+          description: User not found
+
+    put:
+      tags:
+        - User
+      description: Operation to update the user resource.
+      operationId: putUser
+      parameters:
+        - in: path
+          name: username
+          required: true
+          schema:
+            type: string
+            example: Virat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  example: xyz
+      responses:
+        '200':
+          description: Successfuly updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                    example: 1
+                  username:
+                    type: string
+                    example: Virat
+        '404':
+          description: User not found
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+    delete:
+      tags:
+        - User
+      description: Operation to delete the user resource
+      operationId: deleteUser
+      parameters:
+        - in: path
+          name: username
+          required: true
+          schema:
+            type: string
+            example: Virat
+      responses:
+        '200':
+          description: Successfully Deleted
+        '404':
+          description: User not found
+        '500':
+          description: Intenal Server Error
+
+  /api/user:
+    description: End point to create user resource
+    post:
+      tags:
+        - User
+      description: Operation to create the user resource
+      operationId: postUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: Virat
+                password:
+                  type: string
+                  example: xyz
+      responses:
+        '201':
+          description: Successfully Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                    example: 1
+                  username:
+                    type: string
+                    example: Virat
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+  /api/post/{post_id}:
+    description: Url to read, update and delete the post resource.
+    get:
+      tags:
+        - Post
+      description: Operation to read post resource
+      operationId: getPost
+      parameters:
+        - in: path
+          name: post_id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                title: post object
+                type: object
+                properties:
+                  post_id:
+                    type: integer
+                    example: 1
+                  title:
+                    type: string
+                    example: First Post
+                  user_id:
+                    type: integer
+                    example: 1
+                  timestamp:
+                    type: string
+                    example: yyyy/mm/dd hh:mm:ss
+        '500':
+          description: Internal server error
+        '404':
+          description: Post not found
+
+    put:
+      tags:
+        - Post
+      description: Operation to update the post resource
+      operationId: putPost
+      parameters:
+        - in: path
+          name: post_id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: First Post
+                image:
+                  type: string
+                  example: abc.jpg
+      responses:
+        '200':
+          description: Successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  post_id:
+                    type: integer
+                    example: 1
+                  title:
+                    type: string
+                    example: First Post
+                  user_id:
+                    type: integer
+                    example: 1
+                  timestamp:
+                    type: string
+                    example: yyyy/mm/dd hh:mm:ss
+        '404':
+          description: Post not found
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+    delete:
+      tags:
+        - Post
+      description: Operation to delete the post resource
+      operationId: deletePost
+      parameters:
+        - in: path
+          name: post_id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Successfully Deleted
+        '500':
+          description: Internal Server Error
+        '404':
+          description: Post not found
+
+  /api/post:
+    description: Url to create post resource
+    post:
+      tags:
+        - Post
+      description: Operation to create the post resource
+      operationId: postPost
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: First Post
+                content:
+                  type: string
+                  example: Hello
+                image:
+                  type: string
+                  example: abc.jpg
+                user_id:
+                  type: integer
+                  example: 1
+                
+      responses:
+        '201':
+          description: Successfully Created
+          content:
+            application/json:
+              schema:
+                title: post object
+                type: object
+                properties:
+                  post_id:
+                    type: integer
+                    example: 1
+                  title:
+                    type: string
+                    example: First Post
+                  user_id:
+                    type: integer
+                    example: 1
+                  timestamp:
+                    type: string
+                    example: yyyy/mm/dd hh:mm:ss
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+
+  
