@@ -7,12 +7,16 @@ app=Flask(__name__)
 
 current_dir=os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///'+os.path.join(current_dir,'blogdb.sqlite3')
+
 upload_folder='static/'
 app.config['UPLOAD_FOLDER']=upload_folder
 
 db.init_app(app)
 api=Api(app)
 app.app_context().push()
+
+with app.app_context():
+  db.create_all()
 
 from controllers import *
 from api import UserAPI,PostAPI
