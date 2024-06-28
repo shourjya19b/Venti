@@ -1,1 +1,1 @@
-#Venti - Social Microblogging Platform
+Venti - Social Microblogging Platform
