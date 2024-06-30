@@ -1,0 +1,80 @@
+{% extends "layout.html" %} {% block content %}
+<nav class="navbar navbar-expand-lg bg-dark fixed-top">
+  <div class="container p-1">
+    <a class="navbar-brand text-light" href="#">Search</a>
+    <form
+      class="d-flex m-auto"
+      action="/search/{{user.user_id}}"
+      method="POST"
+      role="search"
+    >
+      <input
+        class="form-control ms-5 me-2"
+        type="search"
+        placeholder="Type a username.."
+        name="name"
+      />
+      <button class="btn btn-success" type="submit">Search</button>
+    </form>
+    <a
+      class="btn btn-light rounded-pill me-2"
+      href="/profile/{{user.username}}/{{user.user_id}}"
+      >My Profile</a
+    >
+    <a class="btn btn-light rounded-pill" href="/login">Log Out</a>
+  </div>
+</nav>
+{% if searched_users!=[] %} {% if searched_users!=None %}
+<div class="container mt-5 p-5">
+  <div class="row justify-content-center py-1">
+    <div class="col-md-6 rounded border shadow bg-light p-4">
+      <h1 class="h4 text-center text-dark mb-5">Search Results</h1>
+      <form action="/search/{{user.user_id}}/{{key}}" method="POST">
+        {% for searched_user in searched_users %}
+        <div class="row text-center mb-5">
+          <div class="col pt-1">
+            <h1 class="h5">{{searched_user.username}}</h1>
+          </div>
+          <div class="col">
+            {% if searched_user.user_id in followed %}
+            <input
+              type="checkbox"
+              class="btn-check"
+              id="btn-check-outlined_{{searched_user.user_id}}"
+              autocomplete="off"
+              name="Follow_Users"
+              value="{{searched_user.user_id}}"
+              checked
+            />
+            {% else %}
+            <input
+              type="checkbox"
+              class="btn-check"
+              id="btn-check-outlined_{{searched_user.user_id}}"
+              autocomplete="off"
+              name="Follow_Users"
+              value="{{searched_user.user_id}}"
+            />
+            {% endif %}
+            <label
+              class="btn btn-outline-dark rounded-pill"
+              for="btn-check-outlined_{{searched_user.user_id}}"
+              >Follow</label
+            >
+          </div>
+        </div>
+        {% endfor %}
+        <div class="mb-2 text-center px-3">
+          <button type="submit" class="btn btn-dark btn-lg shadow rounded-pill">
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endif %} {% else %}
+<div class="text-center mt-5 p-5">
+  <h1 class="h4 mb-3">No users found</h1>
+</div>
+{% endif %} {% endblock content %}

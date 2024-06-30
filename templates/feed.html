@@ -1,0 +1,67 @@
+{% extends "layout.html" %} {% block content %}
+<nav class="navbar navbar-expand-lg bg-dark fixed-top">
+  <div class="container p-1">
+    <a class="navbar-brand text-light" href="#">Welcome {{user.username}}</a>
+    <a
+      class="btn btn-light rounded-pill shadow ms-auto me-2"
+      href="/search/{{user.user_id}}"
+      >Search</a
+    >
+    <a
+      class="btn btn-light rounded-pill shadow me-2"
+      href="/profile/{{user.username}}/{{user.user_id}}"
+      >My Profile</a
+    >
+    <a class="btn btn-light shadow rounded-pill" href="/login">Log out</a>
+  </div>
+</nav>
+{% if message!=None %}
+<div class="mt-5 p-5 text-center"><h1 class="h4">{{message}}</h1></div>
+{% endif %}
+<div class="container mt-5 p-5">
+  {% for i in range(n_posts) %}
+  <div class="row justify-content-center py-3">
+    <div class="col-md-6 rounded border shadow bg-light p-4">
+      <div class="mb-4 mx-3">
+        {% if posters[i][1]!=None and posters[i][1]!='' %}
+        <img
+          src="{{url_for('static',filename='/profile_pics/'+posters[i][1])}}"
+          class="rounded-circle border"
+          width="50"
+          height="50"
+        />
+        {% endif %}
+        <a class="btn" href="/profile/{{posters[i][0]}}/{{user.user_id}}"
+          ><h4>{{posters[i][0]}}</h4></a
+        >
+      </div>
+      <div class="mb-3 mx-3">
+        <h4><em>{{posts[i].title}}</em></h4>
+      </div>
+      <div class="mb-3 mx-3">{{posts[i].content}}</div>
+      {% if posts[i].image!=None and posts[i].image!='' %}
+      <div class="mb-5 mx-3">
+        <img
+          src="{{url_for('static',filename='/post_pics/'+posts[i].image)}}"
+          class="img-fluid rounded"
+        />
+      </div>
+      {% endif %}
+      <div class="mb-1 mx-3 text-center">
+        <button class="btn btn-dark btn-sm rounded-pill me-3">
+          Likes: {{n_likes[i]}}
+        </button>
+        <button class="btn btn-dark btn-sm rounded-pill me-3">
+          Comments: {{n_comments[i]}}
+        </button>
+        <a
+          class="btn btn-dark btn-sm rounded-pill"
+          href="/view_post/{{posts[i].post_id}}/{{user.user_id}}"
+          >View Post</a
+        >
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock content %}

@@ -1,0 +1,57 @@
+{% extends "layout.html" %} {% block content %}
+<nav class="navbar navbar-expand-lg bg-dark fixed-top">
+  <div class="container p-1">
+    <a class="navbar-brand text-light" href="#">Update Profile</a>
+    <a
+      class="btn btn-light rounded-pill ms-auto me-2"
+      href="/profile/{{user.username}}/{{user.user_id}}"
+      >My Profile</a
+    >
+    <a class="btn btn-light shadow rounded-pill" href="/login">Log out</a>
+  </div>
+</nav>
+<div class="container mt-5 p-5">
+  <div class="row justify-content-center py-1">
+    <div class="col-md-5 rounded border shadow bg-light p-4">
+      <h1 class="h4 text-center text-dark mb-4">Profile</h1>
+      <form
+        action="/update_profile/{{user.user_id}}"
+        enctype="multipart/form-data"
+        method="POST"
+      >
+        <div class="mb-3 px-3">
+          <label for="Input1" class="form-label">Username</label>
+          <input
+            type="text"
+            class="form-control"
+            name="username"
+            id="Input1"
+            value="{{user.username}}"
+            disabled
+          />
+        </div>
+        <div class="mb-4 px-3">
+          <label for="Input2" class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            id="Input1"
+            value="{{user.password}}"
+            disabled
+          />
+        </div>
+        <div class="mb-4 px-3">
+          <label for="formFile" class="form-label">Upload Image</label>
+          <input class="form-control" type="file" id="formFile" name="image" />
+        </div>
+        <div class="mb-2 text-center px-3">
+          <button type="submit" class="btn btn-lg btn-dark shadow rounded-pill">
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}

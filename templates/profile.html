@@ -1,0 +1,105 @@
+{% extends "layout.html" %} {% block content %}
+<nav class="navbar navbar-expand-lg bg-dark fixed-top">
+  <div class="container p-1">
+    <a class="navbar-brand text-light" href="#">Profile</a>
+    <a
+      class="btn btn-light rounded-pill shadow ms-auto me-3"
+      href="/feed/{{visitor.user_id}}"
+      >My Feed</a
+    >
+    {% if visitor.user_id!=user.user_id %}
+    <a
+      class="btn btn-light rounded-pill shadow me-3"
+      href="/profile/{{visitor.username}}/{{visitor.user_id}}"
+      >My Profile</a
+    >
+    {% else %}
+    <a
+      class="btn btn-light rounded-pill shadow me-3"
+      href="/update_profile/{{user.user_id}}"
+      >Update Profile</a
+    >
+    <a
+      class="btn btn-light rounded-pill shadow me-1"
+      href="/delete_user/{{user.user_id}}"
+      >Delete Profile</a
+    >
+    > {% endif %}
+    <a class="btn btn-light shadow rounded-pill" href="/login">Log out</a>
+  </div>
+</nav>
+<div class="container mt-5 p-5">
+  <div class="row text-center p-4">
+    <div class="col-3 p-4">
+      <div class="mb-4">
+        {% if user.profile_image!=None and user.profile_image!='' %}
+        <img
+          src="{{image}}"
+          class="rounded-3 shadow"
+          width="220"
+          height="200"
+        />
+        {% else %}
+        <img
+          src="/static/default-profile-picture.png"
+          class="rounded-3 shadow"
+          width="220"
+          height="200"
+        />
+        {% endif %}
+      </div>
+      <div class="text-center">
+        <h5 class="text-dark"><em>{{user.username}}</em></h5>
+      </div>
+    </div>
+    <div class="col-3 p-5">
+      <h1 class="h4 mt-5"><em>Total Posts</em></h1>
+      <h1 class="h4">{{n_posts}}</h1>
+    </div>
+    <div class="col-3 p-5">
+      <h1 class="h4 mt-5"><em>Following</em></h1>
+      <h1 class="h4">{{n_fol}}</h1>
+    </div>
+    <div class="col-3 p-5">
+      <h1 class="h4 mt-5"><em>Followers</em></h1>
+      <h1 class="h4">{{n_fol_by}}</h1>
+    </div>
+  </div>
+  {% if n_posts>0 %}
+  <h1 class="h3 ms-3">Posts</h1>
+  <div class="row p-3 g-4">
+    {% for post in posts %}
+    <div class="col-3">
+      <div class="card bg-light shadow">
+        {% if post.image!=None and post.image!='' %}
+        <img
+          src="{{url_for('static',filename='/post_pics/'+post.image)}}"
+          class="card-img-top"
+        />
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{post.title}}</h5>
+          <p class="card-text">{{post.content}}</p>
+          <a
+            href="/view_post/{{post.post_id}}/{{visitor.user_id}}"
+            class="btn btn-dark rounded-pill"
+            >View Post</a
+          >
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %} {% if user.user_id==visitor.user_id %}
+  <div class="row mt-3">
+    <div class="text-center">
+      <a
+        class="btn btn-dark rounded-pill text-center"
+        href="/create_post/{{user.user_id}}"
+        >Add Post</a
+      >
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock content %}

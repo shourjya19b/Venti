@@ -1,0 +1,36 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container text-center mt-5 p-5">
+  <div class="row justify-content-center p-5">
+    <div class="col-md-5 rounded border shadow bg-light p-5">
+      <h1 class="display-5 text-secondary mb-4">Register</h1>
+      <form action="/register" method="POST">
+        <div class="mb-3 px-3">
+          <input
+            type="text"
+            class="form-control"
+            name="username"
+            placeholder="Username"
+          />
+        </div>
+        <div class="mb-4 px-3">
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            placeholder="Password"
+          />
+        </div>
+        <div class="mb-4">
+          <button type="submit" class="btn btn-lg btn-dark shadow rounded-pill">
+            Submit
+          </button>
+        </div>
+      </form>
+      <div class="mb-2 text-secondary">
+        Already have an account?
+        <a href="/login" class="link-dark">Sign in</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,119 @@
+{% extends "layout.html" %} {% block content %}
+<nav class="navbar navbar-expand-lg bg-dark fixed-top">
+  <div class="container p-1">
+    <a class="navbar-brand text-light" href="#">View Post</a>
+    <a
+      class="btn btn-light shadow rounded-pill ms-auto me-2"
+      href="/profile/{{user.username}}/{{user.user_id}}"
+      >My Profile</a
+    >
+    <a class="btn btn-light rounded-pill shadow" href="/login">Log out</a>
+  </div>
+</nav>
+<div class="container mt-5 p-5">
+  <div class="row justify-content-center py-1">
+    <div class="col-md-6 rounded border shadow bg-light p-4">
+      <div class="mb-4 mx-3">
+        {% if poster.profile_image!=None and poster.profile_image!='' %}
+        <img
+          src="{{url_for('static',filename='/profile_pics/'+poster.profile_image)}}"
+          class="rounded-circle"
+          width="50"
+          height="50"
+        />
+        {% endif %}
+        <a class="btn" href="/profile/{{poster.username}}/{{user.user_id}}"
+          ><h4>{{poster.username}}</h4></a
+        >
+      </div>
+      <div class="mb-3 mx-3">
+        <h4><em>{{post.title}}</em></h4>
+      </div>
+      <div class="mb-3 mx-3">{{post.content}}</div>
+      {% if post.image!=None and post.image!='' %}
+      <div class="mb-5 mx-3">
+        <img src="{{image}}" class="img-fluid rounded" />
+      </div>
+      {% endif %}
+      <form action="/view_post/{{post.post_id}}/{{user.user_id}}" method="POST">
+        <div class="mb-4 mx-3 text-center">
+          {% if liked==True %}
+          <input
+            type="checkbox"
+            class="btn-check me-2"
+            id="btn-check-outlined"
+            autocomplete="off"
+            name="Like_Post"
+            checked
+          />
+          {% else %}
+          <input
+            type="checkbox"
+            class="btn-check"
+            id="btn-check-outlined"
+            autocomplete="off"
+            name="Like_Post"
+          />
+          {% endif %}
+          <label
+            class="btn btn-outline-success me-2 btn-sm rounded-pill"
+            for="btn-check-outlined"
+            >Like</label
+          >
+          {% if post.user_id==user.user_id %}
+          <a
+            class="btn btn-primary btn-sm rounded-pill me-2"
+            href="/edit_post/{{post.post_id}}"
+            >Edit</a
+          >
+          <a
+            class="btn btn-danger btn-sm rounded-pill"
+            href="/delete_post/{{post.post_id}}"
+            >Delete</a
+          >
+          {% endif %}
+        </div>
+        <div class="mb-4 mx-3">
+          <textarea
+            class="form-control"
+            rows="2"
+            name="comment_text"
+            placeholder="Add a comment.."
+          ></textarea>
+        </div>
+        <div class="mb-2 text-center px-3">
+          <button type="submit" class="btn btn-dark btn-lg shadow rounded-pill">
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  {% if n_comments!=0 %}
+  <h1 class="h4 text-center text-dark my-4">Comments</h1>
+  {% endif %} {% for i in range(n_comments) %}
+  <div class="row justify-content-center py-1">
+    <div class="col-md-6 rounded border shadow-sm bg-light p-4">
+      <div class="mb-2 px-3 ms-1">
+        {% if commenters[i][1]!=None and commenters[i][1]!='' %}
+        <img
+          src="{{url_for('static',filename='/profile_pics/'+commenters[i][1])}}"
+          class="rounded-circle"
+          width="50"
+          height="50"
+        />
+        {% endif %}
+        <a
+          class="btn rounded-pill ms-2"
+          href="/profile/{{commenters[i][0]}}/{{user.user_id}}"
+          ><strong>{{commenters[i][0]}}</strong></a
+        >
+      </div>
+      <div class="mb-3 px-5 ms-5 bg-white text-dark rounded-pill">
+        {{comments[i].comment_text}}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock content %}
